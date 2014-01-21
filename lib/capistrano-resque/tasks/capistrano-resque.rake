@@ -50,7 +50,7 @@ namespace :resque do
             threads << Thread.new(pid) do |pid|
               on roles(role) do
                 within current_path do
-                  execute :rake, %{RAILS_ENV=#{fetch(:rails_env)} QUEUE="#{queue}" PIDFILE=#{pid} BACKGROUND=yes VERBOSE=1 INTERVAL=#{fetch(:interval)} #{"environment" if fetch(:resque_environment_task)} resque:work}
+                  execute :rake, %{QUEUE="#{queue}" PIDFILE=#{pid} BACKGROUND=yes VERBOSE=1 INTERVAL=#{fetch(:interval)} #{"environment" if fetch(:resque_environment_task)} resque:work}
                 end
               end
             end
@@ -104,7 +104,7 @@ namespace :resque do
       on roles :resque_scheduler do
         pid = "#{current_path}/tmp/pids/scheduler.pid"
         within current_path do
-          execute :rake, %{RAILS_ENV=#{fetch(:rails_env)} PIDFILE=#{pid} BACKGROUND=yes VERBOSE=1 MUTE=1 resque:scheduler}
+          execute :rake, %{PIDFILE=#{pid} BACKGROUND=yes VERBOSE=1 MUTE=1 resque:scheduler}
         end
       end
     end
